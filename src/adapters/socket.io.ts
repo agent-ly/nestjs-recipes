@@ -1,11 +1,14 @@
 import type { INestApplication } from "@nestjs/common";
 import { IoAdapter } from "@nestjs/platform-socket.io";
-import type { ServerOptions } from "socket.io";
+import type { Server, ServerOptions } from "socket.io";
 
-type Ctor = (nsp: any) => any;
+type AdapterCtor = (nsp: any) => any;
 
-export class IoCtorAdapter extends IoAdapter {
-  constructor(app: INestApplication, private readonly adapterCtor: Ctor) {
+export class CustomIoAadapter extends IoAdapter {
+  constructor(
+    app: INestApplication,
+    private readonly adapterCtor: AdapterCtor
+  ) {
     super(app);
   }
 
@@ -13,12 +16,12 @@ export class IoCtorAdapter extends IoAdapter {
     if (!options) return this.createIOServer(port);
     const { namespace, ...serverOptions } = options;
     const server = this.createIOServer(port, serverOptions);
-    return namespace ? server.of(namespace) : server;
+    return namespace ? (server as Server).of(namespace) : server;
   }
 
   createIOServer(port: number, options?: ServerOptions) {
     const server = super.createIOServer(port, options);
-    server.adapter(this.adapterCtor);
+    (server as Server).adapter(this.adapterCtor);
     return server;
   }
 }

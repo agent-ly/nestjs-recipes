@@ -1,8 +1,13 @@
 import type { FactoryProvider } from "@nestjs/common";
+import type { Namespace } from "socket.io";
 
 import { getConnectionToken } from "./builder.js";
 
-export type SocketIoFactory = (connection: any) => unknown | Promise<unknown>;
+export type SocketIoFactoryFn<Connection> = (
+  connection: Connection
+) => unknown | Promise<unknown>;
+
+export type SocketIoAdapterCtor<AdapterCtor> = (nsp: Namespace) => AdapterCtor;
 
 export const getAdapterCtorToken = (
   moduleName: string,
@@ -12,20 +17,20 @@ export const getAdapterCtorToken = (
 export const getEmitterToken = (moduleName: string, connectionName?: string) =>
   `${getConnectionToken(moduleName, connectionName)}/emitter`;
 
-export const createSocketIoAdapterProvider = (
+export const createSocketIoAdapterCtorProvider = <Connection>(
   moduleName: string,
   connectionName: string | undefined,
-  adapterFactory: SocketIoFactory
+  adapterFactory: SocketIoFactoryFn<Connection>
 ): FactoryProvider => ({
   inject: [getConnectionToken(moduleName, connectionName)],
   provide: getAdapterCtorToken(moduleName, connectionName),
   useFactory: adapterFactory,
 });
 
-export const createSocketIoEmitterProvider = (
+export const createSocketIoEmitterProvider = <Connection>(
   moduleName: string,
   connectionName: string | undefined,
-  emitterFactory: SocketIoFactory
+  emitterFactory: SocketIoFactoryFn<Connection>
 ): FactoryProvider => ({
   inject: [getConnectionToken(moduleName, connectionName)],
   provide: getEmitterToken(moduleName, connectionName),
