@@ -1,6 +1,6 @@
 {
   "name": "nestjs-recipes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A collection of recipes I use in my NestJS apps/libraries",
   "repository": "https://github.com/agent-ly/nestjs-recipes",
   "type": "module",
