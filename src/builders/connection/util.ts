@@ -13,9 +13,9 @@ export const autoRetryConnect = (
     defer(() => connect()).pipe(
       retry({
         count: retryAttempts,
-        delay(error, count) {
+        delay(error, attempt) {
           logger.error(
-            `Failed to connect. Retrying in ${retryDelay}ms. Attempt ${count} of ${retryAttempts}. Error: ${error.message}`
+            `(attempts: ${attempt}/${retryAttempts}, delay: ${retryDelay}ms) Failed to connect: ${error.message}`
           );
           return timer(retryDelay);
         },
