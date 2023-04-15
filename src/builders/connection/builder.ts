@@ -9,6 +9,8 @@ export interface ConnectionModuleDefinitionOptions {
   connectionName?: string;
 }
 
+export const DEFAULT_CONNECTION_NAME = "default";
+
 export const createConfigurableConnectionModuleBuilder = <
   ModuleOptions,
   ExtraModuleDefinitionOptions extends ConnectionModuleDefinitionOptions
@@ -26,7 +28,7 @@ export const createConfigurableConnectionModuleBuilder = <
     optionsInjectionToken,
   }).setExtras<ExtraModuleDefinitionOptions>(
     {} as ExtraModuleDefinitionOptions,
-    (definition, { connectionName = "default" }) => {
+    (definition, { connectionName = DEFAULT_CONNECTION_NAME }) => {
       const connectionNameProvider = createConnectionNameProvider(
         connectionNameInjectionToken,
         connectionName
@@ -40,15 +42,10 @@ export const createConfigurableConnectionModuleBuilder = <
         connectionInjectionToken,
         connectionFactory
       );
-      definition.providers = [
-        ...(definition.providers ?? []),
-        connectionNameProvider,
-        connectionProvider,
-      ];
-      definition.exports = [
-        ...(definition.exports ?? []),
-        connectionInjectionToken,
-      ];
+      if (!definition.providers) definition.providers = [];
+      definition.providers.push(connectionNameProvider, connectionProvider);
+      if (!definition.exports) definition.exports = [];
+      definition.exports.push(connectionInjectionToken);
       return definition;
     }
   );
@@ -59,7 +56,7 @@ export const getConnectionNameToken = (moduleName: string) =>
 
 export const getConnectionToken = (
   moduleName: string,
-  connectionName = "default"
+  connectionName = DEFAULT_CONNECTION_NAME
 ) => `${moduleName}/${connectionName}_connection`;
 
 const createConnectionNameProvider = (
@@ -71,11 +68,11 @@ const createConnectionNameProvider = (
 });
 
 const createConnectionProvider = <ModuleOptions, ExtraModuleDefinitionOptions>(
-  optionInjectionToken: string,
+  optionsInjectionToken: string,
   connectionInjectionToken: string,
   useFactory: ConnectionFactoryFn<ModuleOptions, ExtraModuleDefinitionOptions>
 ) => ({
-  inject: [optionInjectionToken],
+  inject: [optionsInjectionToken],
   provide: connectionInjectionToken,
   useFactory,
 });
