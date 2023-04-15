@@ -15,7 +15,7 @@ export const autoRetryConnect = (
         count: retryAttempts,
         delay(error, count) {
           logger.error(
-            `Failed to connect to server. Retrying in ${retryDelay}ms. Attempt ${count} of ${retryAttempts}. Error: ${error.message}`
+            `Failed to connect. Retrying in ${retryDelay}ms. Attempt ${count} of ${retryAttempts}. Error: ${error.message}`
           );
           return timer(retryDelay);
         },
