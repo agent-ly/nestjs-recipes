@@ -1,0 +1,46 @@
+{
+  "name": "nestjs-recipes",
+  "version": "1.0.0",
+  "description": "A collection of recipes I use in my NestJS apps/libraries",
+  "repository": "https://github.com/agent-ly/nestjs-recipes",
+  "type": "module",
+  "exports": {
+    "./builders/connection": "./dist/builders/connection/mod.js",
+    "./adapters/socket.io": "./dist/adapters/socket.io.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build:clean": "rm -rf dist",
+    "build:compile": "tsc -p tsconfig.build.json",
+    "build": "pnpm build:clean && pnpm build:compile",
+    "prepack": "pnpm build"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^9.3.12",
+    "@nestjs/platform-socket.io": "^9.3.12",
+    "@nestjs/websockets": "^9.3.12",
+    "rxjs": "^7.8.0",
+    "socket.io": "^4.6.1",
+    "typescript": "^5.0.2"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^9.0.0",
+    "@nestjs/platform-socket.io": "^9.0.0",
+    "@nestjs/websockets": "^9.0.0",
+    "rxjs": "^7.8.0",
+    "socket.io": "^4.6.1"
+  },
+  "peerDependenciesMeta": {
+    "@nestjs/websockets": {
+      "optional": true
+    },
+    "@nestjs/platform-socket.io": {
+      "optional": true
+    },
+    "socket.io": {
+      "optional": true
+    }
+  }
+}
