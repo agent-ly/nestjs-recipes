@@ -72,7 +72,7 @@ const createConnectionProvider = <ModuleOptions, ExtraModuleDefinitionOptions>(
   connectionInjectionToken: string,
   useFactory: ConnectionFactoryFn<ModuleOptions, ExtraModuleDefinitionOptions>
 ) => ({
-  inject: [optionsInjectionToken],
   provide: connectionInjectionToken,
+  inject: [optionsInjectionToken],
   useFactory,
 });

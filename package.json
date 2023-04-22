@@ -13,6 +13,7 @@
     "dist"
   ],
   "scripts": {
+    "test": "vitest",
     "build:clean": "rm -rf dist",
     "build:compile": "tsc -p tsconfig.build.json",
     "build": "pnpm build:clean && pnpm build:compile",
@@ -21,10 +22,12 @@
   "devDependencies": {
     "@nestjs/common": "^9.3.12",
     "@nestjs/platform-socket.io": "^9.3.12",
+    "@nestjs/testing": "^9.4.0",
     "@nestjs/websockets": "^9.3.12",
     "rxjs": "^7.8.0",
     "socket.io": "^4.6.1",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.2",
+    "vitest": "^0.30.1"
   },
   "peerDependencies": {
     "@nestjs/common": "^9.0.0",
